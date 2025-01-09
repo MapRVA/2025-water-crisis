@@ -2,6 +2,27 @@
 options:
   bounds: [-77.56072998046876,37.48085213924346,-77.3650360107422,37.59627995374782]
   attributionControl: { compact: false }
+controls:
+  - type: HTMLControl
+    position: bottom-left
+    options:
+      html: >
+        <div>
+        <b>Legend:</b>
+        <br>
+        🔴 residents fully lost water
+        <br>
+        🟠 residents lost water down to barely a trickle
+        <br>
+        🟡 residents experienced decreased pressure
+        <br>
+        🟢 residents experienced no change in water availability
+        </div>
+      css: >
+        div {
+          background: white;
+          padding: 5px;
+        }
 style:
   extends: https://styles.trailsta.sh/protomaps-grayscale.json
   layers:
