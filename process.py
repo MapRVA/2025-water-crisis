@@ -19,14 +19,20 @@ EXTENTS = [
     "Water pressure was reduced",
     "Not at all, flow was normal",
 ]
-FIELDS = ["h3_cell", "CreationDate", "when_did_you_lose_water", "when_did_you_regain_water", "to_what_extent_did_you_lose_wat"]
+FIELDS = [
+    "h3_cell",
+    "CreationDate",
+    "when_did_you_lose_water",
+    "when_did_you_regain_water",
+    "to_what_extent_did_you_lose_wat",
+]
 
 count = 0
 max_severity = {}
 latest = None
 
 
-with open('docs/raw-h3.csv', 'w', newline='') as file:
+with open("docs/raw-h3.csv", "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(FIELDS)
 
@@ -42,7 +48,9 @@ with open('docs/raw-h3.csv', 'w', newline='') as file:
             lng, lat = feat.geometry.coordinates
             cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
 
-            writer.writerow([cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"]))
+            writer.writerow(
+                [cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
+            )
 
             sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
             if cell not in max_severity or max_severity[cell] == 0:

@@ -7,7 +7,7 @@ Maps available at https://maprva.org/projects/water-crisis/
 Survey results generalized to [H3](https://www.uber.com/blog/h3/)(`resolution=10`) cells are
 available in [./docs/raw-h3.csv](./docs/raw-h3.csv).
 
-Data powering the maps are available in [GeoJSON](https://geojson.org/) files in [./data](./data)
+Data powering the maps are available in [GeoJSON](https://geojson.org/) files in [./docs](./docs)
 
 ## Licensing
 
