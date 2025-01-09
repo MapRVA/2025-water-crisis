@@ -1,4 +1,7 @@
 ---
+options:
+  bounds: [-77.56072998046876,37.48085213924346,-77.3650360107422,37.59627995374782]
+  attributionControl: { compact: false }
 style:
   layers:
     - type: fill
