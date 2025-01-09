@@ -18,6 +18,8 @@ controls:
         <br>
         🟢 No change in water pressure
         <br>
+        ⚪ No details about type of water loss
+        <br>
         <em>Each cell is colored by the worst response within it</em>
         </div>
       css: >
@@ -38,6 +40,8 @@ style:
         - yellow
         - [==, [get, sev], 2]
         - orange
+        - [==, [get, sev], 1]
         - red
+        - grey
 ---
 https://maprva.github.io/2025-water-crisis/max_severity.geojson

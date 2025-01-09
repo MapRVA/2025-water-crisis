@@ -36,7 +36,9 @@ with fiona.open(sys.argv[1]) as src:
         cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
 
         sev = extents.index(feat.properties["to_what_extent_did_you_lose_wat"])
-        if cell not in max_severity or max_severity[cell] > sev:
+        if cell not in max_severity or max_severity[cell] == 0:
+            max_severity[cell] = sev
+        elif max_severity[cell] > sev and sev != 0:
             max_severity[cell] = sev
 
 json.dump({"count": count, "latest": latest}, open("docs/meta.json", "w"))
