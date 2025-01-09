@@ -1,4 +1,4 @@
-# Maps and data of the January 2025 Richmond Water Crisis
+# Maps and data of the 2025 Richmond Water Crisis
 
 Maps available at https://maprva.org/projects/water-crisis/
 
