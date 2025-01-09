@@ -18,7 +18,7 @@ extents = [
     "Water pressure was reduced",
 ]
 
-cells = {}
+max_severity = {}
 with fiona.open("survey.shp") as src:
     for feat in src:
         if not shapely.geometry.shape(feat.geometry).within(BOUNDS):
@@ -26,8 +26,8 @@ with fiona.open("survey.shp") as src:
         lng, lat = feat.geometry.coordinates
         cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
         sev = extents.index(feat.properties["to_what_ex"])
-        if cell not in cells or cells[cell] > sev:
-            cells[cell] = sev
+        if cell not in max_severity or max_severity[cell] > sev:
+            max_severity[cell] = sev
 
 json.dump(
     {
@@ -41,8 +41,8 @@ json.dump(
                     "sev": sev,
                 },
             }
-            for cell, sev in cells.items()
+            for cell, sev in max_severity.items()
         ],
     },
-    open("docs/cells.geojson", "w"),
+    open("docs/max_severity.geojson", "w"),
 )
