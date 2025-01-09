@@ -2,6 +2,10 @@
 
 Maps available at https://maprva.org/projects/water-crisis/
 
+If you use the data in a digital context, include a link to https://maprva.org/projects/water-crisis/
+
+If you use the maps in an analog context, include "maprva.org"
+
 ## Licensing
 
 ### Maps
