@@ -3,6 +3,7 @@ options:
   bounds: [-77.56072998046876,37.48085213924346,-77.3650360107422,37.59627995374782]
   attributionControl: { compact: false }
 style:
+  extends: https://styles.trailsta.sh/protomaps-grayscale.json
   layers:
     - type: fill
       fill-opacity: 0.5
