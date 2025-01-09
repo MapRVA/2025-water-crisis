@@ -10,13 +10,15 @@ controls:
         <div>
         <b>Legend:</b>
         <br>
-        🔴 residents fully lost water
+        🔴 Fully lost water
         <br>
-        🟠 residents lost water down to barely a trickle
+        🟠 Water pressure decreased to a trickle
         <br>
-        🟡 residents experienced decreased pressure
+        🟡 Water pressure noticeably decreased
         <br>
-        🟢 residents experienced no change in water availability
+        🟢 No change in water pressure
+        <br>
+        <em>Each cell is colored by the worst response within it</em>
         </div>
       css: >
         div {
