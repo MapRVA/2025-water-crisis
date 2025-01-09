@@ -1,0 +1,16 @@
+---
+style:
+  layers:
+    - type: fill
+      fill-opacity: 0.5
+      fill-color:
+        - case
+        - [==, [get, sev], 4]
+        - green
+        - [==, [get, sev], 3]
+        - yellow
+        - [==, [get, sev], 2]
+        - orange
+        - red
+---
+https://maprva.github.io/2025-water-crisis/cells.geojson
