@@ -2,15 +2,15 @@
 
 Maps available at https://maprva.org/projects/water-crisis/
 
-If you use the data in a digital context, include a link to https://maprva.org/projects/water-crisis/
-
-If you use the maps in an analog context, include "maprva.org"
-
 ## Licensing
 
 ### Maps
 
 Maps are licensed under [CC-BY](https://creativecommons.org/licenses/by/4.0/)
+
+If you use the maps in a digital context, include a link to https://maprva.org/projects/water-crisis/
+
+If you use the maps in an analog context, include "maprva.org"
 
 ### Data
 
@@ -18,7 +18,7 @@ Data is licensed under the [](https://opendatacommons.org/licenses/odbl/) and re
 
 If you use the data in a digital context, include a link to https://maprva.org/projects/water-crisis/
 
-If you use the maps in an analog context, include "maprva.org"
+If you use the data in an analog context, include "maprva.org"
 
 ### Code
 
