@@ -27,10 +27,6 @@ FIELDS = [
     "to_what_extent_did_you_lose_wat",
 ]
 
-count = 0
-max_severity = {}
-latest = None
-
 
 # Collect features
 feats = []
@@ -55,6 +51,8 @@ with open("docs/raw-h3.csv", "w", newline="") as file:
         )
 
 # Compute basic metadata
+count = 0
+latest = None
 for feat in feats:
     count += 1
     if latest is None or latest < feat.properties["CreationDate"]:
@@ -62,6 +60,7 @@ for feat in feats:
 json.dump({"count": count, "latest": latest}, open("docs/meta.json", "w"))
 
 # Compute max severities
+max_severity = {}
 for feat in feats:
     lng, lat = feat.geometry.coordinates
     cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
