@@ -14,8 +14,8 @@ extents = [
     None,
     "Fully lost water",
     "Down to just a trickle",
-    "Not at all, flow was normal",
     "Water pressure was reduced",
+    "Not at all, flow was normal",
 ]
 
 max_severity = {}
