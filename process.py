@@ -1,3 +1,4 @@
+import csv
 import json
 import sys
 
@@ -11,35 +12,43 @@ BOUNDS = shapely.box(
 )
 RESOLUTION = 9
 
-extents = [
+EXTENTS = [
     None,
     "Fully lost water",
     "Down to just a trickle",
     "Water pressure was reduced",
     "Not at all, flow was normal",
 ]
+FIELDS = ["h3_cell", "CreationDate", "when_did_you_lose_water", "when_did_you_regain_water", "to_what_extent_did_you_lose_wat"]
 
 count = 0
 max_severity = {}
 latest = None
 
-with fiona.open(sys.argv[1]) as src:
-    for feat in src:
-        if not shapely.geometry.shape(feat.geometry).within(BOUNDS):
-            continue
 
-        count += 1
-        if latest is None or latest < feat.properties["CreationDate"]:
-            latest = feat.properties["CreationDate"]
+with open('docs/raw-h3.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(FIELDS)
 
-        lng, lat = feat.geometry.coordinates
-        cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+    with fiona.open(sys.argv[1]) as src:
+        for feat in src:
+            if not shapely.geometry.shape(feat.geometry).within(BOUNDS):
+                continue
 
-        sev = extents.index(feat.properties["to_what_extent_did_you_lose_wat"])
-        if cell not in max_severity or max_severity[cell] == 0:
-            max_severity[cell] = sev
-        elif max_severity[cell] > sev and sev != 0:
-            max_severity[cell] = sev
+            count += 1
+            if latest is None or latest < feat.properties["CreationDate"]:
+                latest = feat.properties["CreationDate"]
+
+            lng, lat = feat.geometry.coordinates
+            cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+
+            writer.writerow([cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"]))
+
+            sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
+            if cell not in max_severity or max_severity[cell] == 0:
+                max_severity[cell] = sev
+            elif max_severity[cell] > sev and sev != 0:
+                max_severity[cell] = sev
 
 json.dump({"count": count, "latest": latest}, open("docs/meta.json", "w"))
 
@@ -51,7 +60,7 @@ json.dump(
                 "type": "Feature",
                 "geometry": h3.cells_to_geo([cell]),
                 "properties": {
-                    "to_what_extent_did_you_lose_wat": extents[sev],
+                    "to_what_extent_did_you_lose_wat": EXTENTS[sev],
                     "sev": sev,
                 },
             }
