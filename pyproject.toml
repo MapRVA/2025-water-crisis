@@ -1,0 +1,11 @@
+[project]
+name = "2025-water-crisis"
+version = "0.1.0"
+description = "Scripts for preparing water crisis survey result data"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fiona>=1.10.1",
+    "h3>=4.1.2",
+    "shapely>=2.0.6",
+]
