@@ -1,4 +1,5 @@
 import json
+import sys
 
 import fiona
 import h3
@@ -18,16 +19,27 @@ extents = [
     "Not at all, flow was normal",
 ]
 
+count = 0
 max_severity = {}
-with fiona.open("survey.shp") as src:
+latest = None
+
+with fiona.open(sys.argv[1]) as src:
     for feat in src:
         if not shapely.geometry.shape(feat.geometry).within(BOUNDS):
             continue
+
+        count += 1
+        if latest is None or latest < feat.properties["CreationDate"]:
+            latest = feat.properties["CreationDate"]
+
         lng, lat = feat.geometry.coordinates
         cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
-        sev = extents.index(feat.properties["to_what_ex"])
+
+        sev = extents.index(feat.properties["to_what_extent_did_you_lose_wat"])
         if cell not in max_severity or max_severity[cell] > sev:
             max_severity[cell] = sev
+
+json.dump({"count": count, "latest": latest}, open("docs/meta.json", "w"))
 
 json.dump(
     {
@@ -37,7 +49,7 @@ json.dump(
                 "type": "Feature",
                 "geometry": h3.cells_to_geo([cell]),
                 "properties": {
-                    "to_what_ex": extents[sev],
+                    "to_what_extent_did_you_lose_wat": extents[sev],
                     "sev": sev,
                 },
             }
