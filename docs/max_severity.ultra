@@ -24,7 +24,7 @@ controls:
           padding: 5px;
         }
 style:
-  extends: https://styles.trailsta.sh/protomaps-grayscale.json
+  extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
   layers:
     - type: fill
       fill-opacity: 0.5
