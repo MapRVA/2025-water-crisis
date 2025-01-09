@@ -32,34 +32,45 @@ max_severity = {}
 latest = None
 
 
+# Collect features
+feats = []
+with fiona.open(sys.argv[1]) as src:
+    for feat in src:
+        if not shapely.geometry.shape(feat.geometry).within(BOUNDS):
+            continue
+        feats.append(feat)
+
+# TODO: dedup features
+
+# generate raw-h3 CSV
 with open("docs/raw-h3.csv", "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(FIELDS)
 
-    with fiona.open(sys.argv[1]) as src:
-        for feat in src:
-            if not shapely.geometry.shape(feat.geometry).within(BOUNDS):
-                continue
+    for feat in feats:
+        lng, lat = feat.geometry.coordinates
+        cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+        writer.writerow(
+            [cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
+        )
 
-            count += 1
-            if latest is None or latest < feat.properties["CreationDate"]:
-                latest = feat.properties["CreationDate"]
-
-            lng, lat = feat.geometry.coordinates
-            cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
-
-            writer.writerow(
-                [cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
-            )
-
-            sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
-            if cell not in max_severity or max_severity[cell] == 0:
-                max_severity[cell] = sev
-            elif max_severity[cell] > sev and sev != 0:
-                max_severity[cell] = sev
-
+# Compute basic metadata
+for feat in feats:
+    count += 1
+    if latest is None or latest < feat.properties["CreationDate"]:
+        latest = feat.properties["CreationDate"]
 json.dump({"count": count, "latest": latest}, open("docs/meta.json", "w"))
 
+# Compute max severities
+for feat in feats:
+    lng, lat = feat.geometry.coordinates
+    cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+
+    sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
+    if cell not in max_severity or max_severity[cell] == 0:
+        max_severity[cell] = sev
+    elif max_severity[cell] > sev and sev != 0:
+        max_severity[cell] = sev
 json.dump(
     {
         "type": "FeatureCollection",
