@@ -29,8 +29,17 @@ controls:
         }
 style:
   extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
+  sources:
+    boundary:
+      type: geojson
+      data: https://maprva.github.io/2025-water-crisis/boundary.geojson
   layers:
+    - type: line
+      beforeLayerId: places_subplace
+      source: boundary
+      line-width: 2
     - type: fill
+      beforeLayerId: places_subplace
       fill-opacity: 0.5
       fill-color:
         - case
