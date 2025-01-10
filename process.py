@@ -129,14 +129,13 @@ durations_by_sev = {
     1: {},
     2: {},
     3: {},
-    4: {},
 }
 for feat in feats:
     lng, lat = feat.geometry.coordinates
     cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
 
     sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
-    if sev == 0:
+    if sev == 0 or sev == 4:
         continue
     if feat.properties["when_did_you_lose_water"]:
         duration = datetime.fromisoformat(
@@ -157,7 +156,7 @@ for sev, durations_by_cell in durations_by_sev.items():
                     "type": "Feature",
                     "geometry": h3.cells_to_geo([cell]),
                     "properties": {
-                        "duration": statistics.median(durations),
+                        "duration": round(statistics.median(durations)),
                     },
                 }
                 for cell, durations in durations_by_cell.items()
