@@ -147,7 +147,16 @@ for feat in feats:
         duration = created - start
         if feat.properties["when_did_you_regain_water"]:
             end = datetime.fromisoformat(feat.properties["when_did_you_regain_water"])
+            if end < datetime(2025, 1, 5, tzinfo=timezone.utc):
+                print("WARN: invalid end date:", end)
+                continue
+            if end < start:
+                print("WARN: end date before start date:", start, end)
+                continue
             if end < created:
+                if end > datetime.now(timezone.utc):
+                    print("WARN: invalid end date:", end)
+                    continue
                 duration = end - start
         duration = duration.total_seconds() / 60 / 60
         durations_by_sev[sev].setdefault(cell, []).append(duration)
