@@ -1,0 +1,58 @@
+---
+type: geojson
+popupTemplate: false
+options:
+  bounds: [-77.64038085937504,37.44433544620035,-77.35868453979496,37.60716014465312]
+  attributionControl: { compact: false }
+controls:
+  - type: HTMLControl
+    position: bottom-left
+    options:
+      html: >
+        <div>
+        <b>Legend:</b>
+        <br>
+        🔴 Fully lost water
+        <br>
+        🟠 Water pressure decreased to a trickle
+        <br>
+        🟡 Water pressure noticeably decreased
+        <br>
+        🟢 No change in water pressure
+        <br>
+        ⚪ No details about type of water loss
+        <br>
+        <em>Each cell is colored by the worst response within it</em>
+        </div>
+      css: >
+        div {
+          background: white;
+          padding: 5px;
+        }
+style:
+  extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
+  sources:
+    boundary:
+      type: geojson
+      data: https://maprva.github.io/2025-water-crisis/boundary.geojson
+  layers:
+    - type: line
+      beforeLayerId: places_subplace
+      source: boundary
+      line-width: 2
+    - type: fill
+      beforeLayerId: places_subplace
+      fill-opacity: 0.5
+      fill-color:
+        - case
+        - [==, [get, sev], 4]
+        - green
+        - [==, [get, sev], 3]
+        - yellow
+        - [==, [get, sev], 2]
+        - orange
+        - [==, [get, sev], 1]
+        - red
+        - grey
+---
+https://maprva.github.io/2025-water-crisis/mode_severity.geojson

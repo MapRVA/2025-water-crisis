@@ -1,5 +1,6 @@
 import csv
 import json
+import statistics
 import sys
 
 import fiona
@@ -79,7 +80,6 @@ json.dump(
                 "type": "Feature",
                 "geometry": h3.cells_to_geo([cell]),
                 "properties": {
-                    "to_what_extent_did_you_lose_wat": EXTENTS[sev],
                     "sev": sev,
                 },
             }
@@ -87,6 +87,35 @@ json.dump(
         ],
     },
     open("docs/max_severity.geojson", "w"),
+)
+
+# collect non-zero severities
+severities_by_cell = {}
+for feat in feats:
+    lng, lat = feat.geometry.coordinates
+    cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+
+    sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
+    if max_severity[cell] == 0:
+        continue
+    severities_by_cell.setdefault(cell, []).append(sev)
+
+# dump mode of severity per cell
+json.dump(
+    {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": h3.cells_to_geo([cell]),
+                "properties": {
+                    "sev": statistics.mode(severities),
+                },
+            }
+            for cell, severities in severities_by_cell.items()
+        ],
+    },
+    open("docs/mode_severity.geojson", "w"),
 )
 
 
