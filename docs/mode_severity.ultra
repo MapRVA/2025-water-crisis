@@ -8,7 +8,9 @@ popupTemplate: >
   🟢&nbsp;{{ properties.sev4 }}
 options:
   bounds: [-77.64038085937504,37.44433544620035,-77.35868453979496,37.60716014465312]
-  attributionControl: { compact: false }
+  attributionControl:
+    compact: false
+    customAttribution: '<a href="https://maprva.org">MapRVA</a>'
 controls:
   - type: HTMLControl
     position: bottom-left
@@ -35,6 +37,11 @@ controls:
 style:
   extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
   sources:
+    protomaps:
+      type: vector
+      tiles: ["https://api.protomaps.com/tiles/v4/{z}/{x}/{y}.mvt?key=7942a4a49dd1cdb5"]
+      maxzoom: 15
+      attribution: '<a href="https://openstreetmap.org">OpenStreetMap</a>'
     boundary:
       type: geojson
       data: https://maprva.github.io/2025-water-crisis/boundary.geojson
