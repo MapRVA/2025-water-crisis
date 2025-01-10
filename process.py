@@ -138,6 +138,10 @@ json.dump(
                 "properties": {
                     "sev": statistics.mode(severities),
                     "count": len(severities),
+                    "sev1": len([s for s in severities if s == 1]),
+                    "sev2": len([s for s in severities if s == 2]),
+                    "sev3": len([s for s in severities if s == 3]),
+                    "sev4": len([s for s in severities if s == 4]),
                 },
             }
             for cell, severities in severities_by_cell.items()
