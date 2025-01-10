@@ -137,6 +137,7 @@ json.dump(
                 "geometry": h3.cells_to_geo([cell]),
                 "properties": {
                     "sev": statistics.mode(severities),
+                    "count": len(severities),
                 },
             }
             for cell, severities in severities_by_cell.items()
