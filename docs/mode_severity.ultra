@@ -1,6 +1,11 @@
 ---
 type: geojson
-popupTemplate: false
+popupOnHover: true
+popupTemplate: >
+  🔴{{ properties.sev1 }}
+  🟠{{ properties.sev2 }}
+  🟡{{ properties.sev3 }}
+  🟢{{ properties.sev4 }}
 options:
   bounds: [-77.64038085937504,37.44433544620035,-77.35868453979496,37.60716014465312]
   attributionControl: { compact: false }
