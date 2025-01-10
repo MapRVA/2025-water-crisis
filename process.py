@@ -96,7 +96,7 @@ for feat in feats:
     cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
 
     sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
-    if max_severity[cell] == 0:
+    if sev == 0:
         continue
     severities_by_cell.setdefault(cell, []).append(sev)
 
@@ -117,7 +117,6 @@ json.dump(
     },
     open("docs/mode_severity.geojson", "w"),
 )
-
 
 def format_quote(raw_note: str) -> str:
     note = raw_note.strip('"').strip()
