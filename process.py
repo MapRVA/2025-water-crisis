@@ -137,7 +137,6 @@ json.dump(
                 "geometry": h3.cells_to_geo([cell]),
                 "properties": {
                     "sev": statistics.mode(severities),
-                    "count": len(severities),
                     "sev1": len([s for s in severities if s == 1]),
                     "sev2": len([s for s in severities if s == 2]),
                     "sev3": len([s for s in severities if s == 3]),
@@ -203,6 +202,7 @@ for sev, durations_by_cell in durations_by_sev.items():
                     "geometry": h3.cells_to_geo([cell]),
                     "properties": {
                         "duration": round(statistics.median(durations)),
+                        "count": len(durations),
                         "resolution": h3.get_resolution(cell),
                     },
                 }
