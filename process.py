@@ -2,7 +2,7 @@ import csv
 import json
 import statistics
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 import fiona
 import h3
@@ -133,23 +133,22 @@ durations_by_sev = {
 for feat in feats:
     lng, lat = feat.geometry.coordinates
     cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
-    cell_minus_1 = h3.latlng_to_cell(lat, lng, RESOLUTION-1)
+    cell_minus_1 = h3.latlng_to_cell(lat, lng, RESOLUTION - 1)
 
     sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
     if sev == 0 or sev == 4:
         continue
     if feat.properties["when_did_you_lose_water"]:
-        duration = datetime.fromisoformat(
-            feat.properties["CreationDate"]
-        ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
-        if (
-            feat.properties["when_did_you_regain_water"]
-            and feat.properties["when_did_you_regain_water"]
-            < feat.properties["CreationDate"]
-        ):
-            duration = datetime.fromisoformat(
-                feat.properties["when_did_you_regain_water"]
-            ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
+        start = datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
+        created = datetime.fromisoformat(feat.properties["CreationDate"])
+        if start < datetime(2025, 1, 5, tzinfo=timezone.utc):
+            print("WARN: invalid start date:", start)
+            continue
+        duration = created - start
+        if feat.properties["when_did_you_regain_water"]:
+            end = datetime.fromisoformat(feat.properties["when_did_you_regain_water"])
+            if end < created:
+                duration = end - start
         duration = duration.total_seconds() / 60 / 60
         durations_by_sev[sev].setdefault(cell, []).append(duration)
         durations_by_sev[sev].setdefault(cell_minus_1, []).append(duration)
