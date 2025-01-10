@@ -1,3 +1,4 @@
 shapely==2.0.6
 h3==4.1.2
 fiona==1.10.1
+pyproj==3.7.0

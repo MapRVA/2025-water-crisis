@@ -8,6 +8,7 @@ import fiona
 import h3
 import shapely
 import shapely.geometry
+from pyproj import Transformer
 
 BOUNDS = shapely.box(
     -77.6118850708008, 37.43343148473675, -77.34203338623048, 37.63408177377815
@@ -29,6 +30,9 @@ FIELDS = [
     "to_what_extent_did_you_lose_wat",
 ]
 
+# Transform to NAD83 / UTM zone 17N -- https://epsg.io/26917-1736
+transformer = Transformer.from_crs("EPSG:4326", "EPSG:26917")
+
 
 # Collect features
 feats = []
@@ -38,10 +42,33 @@ with fiona.open(sys.argv[1]) as src:
             continue
         feats.append(feat)
 
-# TODO: dedup features
-
 # generate raw-h3 CSV
 with open("docs/raw-h3.csv", "w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(FIELDS)
+
+    for feat in feats:
+        lng, lat = feat.geometry.coordinates
+        cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+        writer.writerow(
+            [cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
+        )
+
+# dedup features by converting coords to UTM and dividing by 10, effectively dedup to 10meters
+feat_by_loc = {}
+for feat in feats:
+    utm_coords = transformer.transform(*feat.geometry.coordinates)
+    if (
+        feat.geometry.coordinates not in feat_by_loc
+        or feat_by_loc[(round(utm_coords[0])/10, round(utm_coords[1])/10)].properties["CreationDate"]
+        < feat.properties["CreationDate"]
+    ):
+        feat_by_loc[(round(utm_coords[0])/10, round(utm_coords[1])/10)] = feat
+print(f"Removed {len(feats) - len(feat_by_loc)} feats by deduping")
+feats = list(feat_by_loc.values())
+
+# generate deduped-h3 CSV
+with open("docs/deduped-h3.csv", "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(FIELDS)
 
