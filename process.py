@@ -141,7 +141,11 @@ for feat in feats:
         duration = datetime.fromisoformat(
             feat.properties["CreationDate"]
         ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
-        if feat.properties["when_did_you_regain_water"]:
+        if (
+            feat.properties["when_did_you_regain_water"]
+            and feat.properties["when_did_you_regain_water"]
+            < feat.properties["CreationDate"]
+        ):
             duration = datetime.fromisoformat(
                 feat.properties["when_did_you_regain_water"]
             ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
