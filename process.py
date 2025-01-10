@@ -2,6 +2,7 @@ import csv
 import json
 import statistics
 import sys
+from datetime import datetime
 
 import fiona
 import h3
@@ -48,8 +49,7 @@ with open("docs/raw-h3.csv", "w", newline="") as file:
         lng, lat = feat.geometry.coordinates
         cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
         writer.writerow(
-            [cell]
-            + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
+            [cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
         )
 
 # Compute basic metadata
@@ -118,10 +118,53 @@ json.dump(
     open("docs/mode_severity.geojson", "w"),
 )
 
+
 def format_quote(raw_note: str) -> str:
     note = raw_note.strip('"').strip()
     return f'"{note}"'
 
+
+# durations by severity
+durations_by_sev = {
+    1: {},
+    2: {},
+    3: {},
+    4: {},
+}
+for feat in feats:
+    lng, lat = feat.geometry.coordinates
+    cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+
+    sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
+    if sev == 0:
+        continue
+    if feat.properties["when_did_you_lose_water"]:
+        duration = datetime.fromisoformat(
+            feat.properties["CreationDate"]
+        ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
+        if feat.properties["when_did_you_regain_water"]:
+            duration = datetime.fromisoformat(
+                feat.properties["when_did_you_regain_water"]
+            ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
+        duration = duration.total_seconds() / 60 / 60
+        durations_by_sev[sev].setdefault(cell, []).append(duration)
+for sev, durations_by_cell in durations_by_sev.items():
+    json.dump(
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": h3.cells_to_geo([cell]),
+                    "properties": {
+                        "duration": statistics.median(durations),
+                    },
+                }
+                for cell, durations in durations_by_cell.items()
+            ],
+        },
+        open(f"docs/sev{sev}_median_duration.geojson", "w"),
+    )
 
 # read rows from selected-notes.csv
 with open("docs/selected-notes.csv", "r") as notes:
