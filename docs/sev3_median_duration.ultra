@@ -17,9 +17,10 @@ style:
       beforeLayerId: places_subplace
       source: boundary
       line-width: 2
+      line-color: white
     - type: fill
       beforeLayerId: places_subplace
-      maxzoom: 13
+      maxzoom: 11
       filter: [==, [get, resolution], 8]
       fill-opacity:
         - interpolate
@@ -32,7 +33,7 @@ style:
       fill-color: yellow
     - type: fill
       beforeLayerId: places_subplace
-      minzoom: 13
+      minzoom: 11
       filter: [==, [get, resolution], 9]
       fill-opacity:
         - interpolate
