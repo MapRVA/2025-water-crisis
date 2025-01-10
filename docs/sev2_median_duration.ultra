@@ -7,7 +7,7 @@ options:
   attributionControl: { compact: false }
   
 style:
-  extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
+  extends: https://api.protomaps.com/styles/v4/black/en.json?key=7942a4a49dd1cdb5
   sources:
     boundary:
       type: geojson
