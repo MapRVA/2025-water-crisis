@@ -19,6 +19,21 @@ style:
       line-width: 2
     - type: fill
       beforeLayerId: places_subplace
+      maxzoom: 13
+      filter: [==, [get, resolution], 8]
+      fill-opacity:
+        - interpolate
+        - [linear]
+        - [get, duration]
+        - 0
+        - 0
+        - 96
+        - 1
+      fill-color: red
+    - type: fill
+      beforeLayerId: places_subplace
+      minzoom: 13
+      filter: [==, [get, resolution], 9]
       fill-opacity:
         - interpolate
         - [linear]
