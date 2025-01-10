@@ -47,7 +47,8 @@ with open("docs/raw-h3.csv", "w", newline="") as file:
         lng, lat = feat.geometry.coordinates
         cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
         writer.writerow(
-            [cell] + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
+            [cell]
+            + list([feat.properties[f] for f in FIELDS if f != "h3_cell"])
         )
 
 # Compute basic metadata
@@ -87,3 +88,29 @@ json.dump(
     },
     open("docs/max_severity.geojson", "w"),
 )
+
+
+def format_quote(raw_note: str) -> str:
+    note = raw_note.strip('"').strip()
+    return f'"{note}"'
+
+
+# read rows from selected-notes.csv
+with open("docs/selected-notes.csv", "r") as notes:
+    reader = csv.reader(notes)
+    json.dump(
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": h3.cells_to_geo([row[0]]),
+                    "properties": {
+                        "note": format_quote(row[1]),
+                    },
+                }
+                for row in reader
+            ],
+        },
+        open("docs/selected_notes.geojson", "w"),
+    )
