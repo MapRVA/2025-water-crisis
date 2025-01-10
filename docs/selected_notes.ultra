@@ -1,5 +1,6 @@
 ---
 type: geojson
+popupOnHover: true
 popupTemplate: "{{properties.note}}"
 options:
   bounds: [-77.64038085937504,37.44433544620035,-77.35868453979496,37.60716014465312]
