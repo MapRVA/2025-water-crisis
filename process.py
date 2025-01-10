@@ -133,6 +133,7 @@ durations_by_sev = {
 for feat in feats:
     lng, lat = feat.geometry.coordinates
     cell = h3.latlng_to_cell(lat, lng, RESOLUTION)
+    cell_minus_1 = h3.latlng_to_cell(lat, lng, RESOLUTION-1)
 
     sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
     if sev == 0 or sev == 4:
@@ -151,6 +152,7 @@ for feat in feats:
             ) - datetime.fromisoformat(feat.properties["when_did_you_lose_water"])
         duration = duration.total_seconds() / 60 / 60
         durations_by_sev[sev].setdefault(cell, []).append(duration)
+        durations_by_sev[sev].setdefault(cell_minus_1, []).append(duration)
 for sev, durations_by_cell in durations_by_sev.items():
     json.dump(
         {
@@ -161,6 +163,7 @@ for sev, durations_by_cell in durations_by_sev.items():
                     "geometry": h3.cells_to_geo([cell]),
                     "properties": {
                         "duration": round(statistics.median(durations)),
+                        "resolution": h3.get_resolution(cell),
                     },
                 }
                 for cell, durations in durations_by_cell.items()
