@@ -5,7 +5,7 @@ options:
   bounds: [-77.64038085937504,37.44433544620035,-77.35868453979496,37.60716014465312]
   attributionControl: { compact: false }
 style:
-  extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
+  extends: https://api.protomaps.com/styles/v4/light/en.json?key=7942a4a49dd1cdb5
   sources:
     boundary:
       type: geojson
@@ -17,7 +17,7 @@ style:
       line-width: 2
     - type: fill
       beforeLayerId: places_subplace
-      fill-color: yellow
+      fill-color: black
       fill-opacity: 0.5
 ---
 https://maprva.github.io/2025-water-crisis/selected_notes.geojson
