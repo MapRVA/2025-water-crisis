@@ -1,0 +1,65 @@
+---
+type: geojson
+popupOnHover: true
+popupTemplate: >
+  🔴&nbsp;{{ properties.sev1 }}&nbsp;
+  🟠&nbsp;{{ properties.sev2 }}&nbsp;
+  🟡&nbsp;{{ properties.sev3 }}&nbsp;
+  🟢&nbsp;{{ properties.sev4 }}
+options:
+  bounds: [-77.64038085937504,37.44433544620035,-77.35868453979496,37.60716014465312]
+  attributionControl:
+    compact: false
+    customAttribution: '<a target="_blank" href="https://maprva.org">MapRVA</a>'
+controls:
+  - type: HTMLControl
+    position: bottom-left
+    options:
+      html: >
+        <div>
+        <b>Legend:</b>
+        <br>
+        🔴 Fully lost water
+        <br>
+        🟠 Water pressure decreased to a trickle
+        <br>
+        🟡 Water pressure noticeably decreased
+        <br>
+        🟢 No change in water pressure
+        <br>
+        ⚪ No data
+        <br>
+        <em>Each cell is colored by the most common response within it</em>
+        </div>
+      css: >
+        div {
+          background: white;
+          padding: 5px;
+        }
+style:
+  extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
+  sources:
+    protomaps:
+      type: vector
+      tiles: ["https://api.protomaps.com/tiles/v4/{z}/{x}/{y}.mvt?key=7942a4a49dd1cdb5"]
+      maxzoom: 15
+      attribution: '<a target="_blank" href="https://openstreetmap.org">OpenStreetMap</a>'
+  layers:
+    - type: fill
+      beforeLayerId: places_subplace
+      fill-opacity: 0.5
+      fill-color:
+        - case
+        - [==, [get, sev], 4]
+        - green
+        - [==, [get, sev], 3]
+        - yellow
+        - [==, [get, sev], 2]
+        - orange
+        - [==, [get, sev], 1]
+        - red
+        - grey
+    - type: line
+      beforeLayerId: places_subplace
+---
+https://maprva.github.io/2025-water-crisis/census_block_mode_severity.geojson
