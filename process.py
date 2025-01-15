@@ -211,6 +211,24 @@ for sev, durations_by_cell in durations_by_sev.items():
         },
         open(f"docs/sev{sev}_median_duration.geojson", "w"),
     )
+    json.dump(
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": h3.cells_to_geo([cell]),
+                    "properties": {
+                        "duration": round(statistics.mean(durations)),
+                        "count": len(durations),
+                        "resolution": h3.get_resolution(cell),
+                    },
+                }
+                for cell, durations in durations_by_cell.items()
+            ],
+        },
+        open(f"docs/sev{sev}_mean_duration.geojson", "w"),
+    )
 
 # read rows from selected-notes.csv
 with open("docs/selected-notes.csv", "r") as notes:

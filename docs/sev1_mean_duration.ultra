@@ -1,0 +1,54 @@
+---
+type: geojson
+popupOnHover: true
+popupTemplate: "{{ properties.duration }} hours<br>{{ properties.count }} reports"
+options:
+  bounds: [-77.6,37.44433544620035,-77.35868453979496,37.60716014465312]
+  attributionControl:
+    compact: false
+    customAttribution: '<a target="_blank" href="https://maprva.org">MapRVA</a>'
+style:
+  extends: https://api.protomaps.com/styles/v4/black/en.json?key=7942a4a49dd1cdb5
+  sources:
+    protomaps:
+      type: vector
+      tiles: ["https://api.protomaps.com/tiles/v4/{z}/{x}/{y}.mvt?key=7942a4a49dd1cdb5"]
+      maxzoom: 15
+      attribution: '<a target="_blank" href="https://openstreetmap.org">OpenStreetMap</a>'
+    boundary:
+      type: geojson
+      data: https://maprva.github.io/2025-water-crisis/boundary.geojson
+  layers:
+    - type: line
+      beforeLayerId: places_subplace
+      source: boundary
+      line-width: 2
+      line-color: white
+    - type: fill
+      beforeLayerId: places_subplace
+      maxzoom: 11
+      filter: [==, [get, resolution], 8]
+      fill-opacity:
+        - interpolate
+        - [linear]
+        - [get, duration]
+        - 0
+        - 0
+        - 96
+        - 1
+      fill-color: red
+    - type: fill
+      beforeLayerId: places_subplace
+      minzoom: 11
+      filter: [==, [get, resolution], 9]
+      fill-opacity:
+        - interpolate
+        - [linear]
+        - [get, duration]
+        - 0
+        - 0
+        - 96
+        - 1
+      fill-color: red
+---
+https://maprva.github.io/2025-water-crisis/sev1_mean_duration.geojson
