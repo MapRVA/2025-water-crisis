@@ -29,7 +29,7 @@ controls:
         <br>
         ⚪ No data
         <br>
-        <em>Each census block is colored by the most common response within it</em>
+        <em>Each census block is colored by the<br>most common response within it</em>
         </div>
       css: >
         div {
