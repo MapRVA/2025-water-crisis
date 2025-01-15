@@ -37,13 +37,7 @@ controls:
           padding: 5px;
         }
 style:
-  extends: https://api.protomaps.com/styles/v4/grayscale/en.json?key=7942a4a49dd1cdb5
-  sources:
-    protomaps:
-      type: vector
-      tiles: ["https://api.protomaps.com/tiles/v4/{z}/{x}/{y}.mvt?key=7942a4a49dd1cdb5"]
-      maxzoom: 15
-      attribution: '<a target="_blank" href="https://openstreetmap.org">OpenStreetMap</a>'
+  extends: https://maprva.github.io/protomaps-ghpages/styles/grayscale/en.json
   layers:
     - type: fill
       beforeLayerId: places_subplace
