@@ -249,3 +249,39 @@ with open("docs/selected-notes.csv", "r") as notes:
         },
         open("docs/selected_notes.geojson", "w"),
     )
+
+# collect reports by census block
+severities_by_census_block = {}
+blocks = []
+with fiona.open("census_blocks.geojson") as census_blocks:
+    for block in census_blocks:
+        block_shape = shapely.geometry.shape(block.geometry)
+        blocks.append(block)
+        for feat in feats:
+            sev = EXTENTS.index(feat.properties["to_what_extent_did_you_lose_wat"])
+            if sev == 0:
+                continue
+            if shapely.geometry.shape(feat.geometry).within(block_shape):
+                severities_by_census_block.setdefault(block.properties['ID'], []).append(sev)
+# dump mode by census block
+json.dump(
+    {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": block.geometry.__geo_interface__,
+                "properties": {
+                    "sev": statistics.mode(severities_by_census_block[block.properties["ID"]]),
+                    "sev1": len([s for s in severities_by_census_block[block.properties["ID"]] if s == 1]),
+                    "sev2": len([s for s in severities_by_census_block[block.properties["ID"]] if s == 2]),
+                    "sev3": len([s for s in severities_by_census_block[block.properties["ID"]] if s == 3]),
+                    "sev4": len([s for s in severities_by_census_block[block.properties["ID"]] if s == 4]),
+                } if block.properties["ID"] in severities_by_census_block else {"sev": 0},
+            }
+            for block in blocks
+        ],
+    },
+    open("docs/census_block_mode_severity.geojson", "w"),
+)
+
