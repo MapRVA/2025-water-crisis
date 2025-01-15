@@ -30,3 +30,7 @@ If you use the data in an analog context, include "maprva.org"
 ### Code
 
 Code to generate the data and maps is licensed under the [WTFPL](http://www.wtfpl.net/about/)
+
+## Other data sources
+
+- Census blocks: https://services1.arcgis.com/k3vhq11XkBNeeOfM/ArcGIS/rest/services/Census_Block_Group_2020/FeatureServer/0
