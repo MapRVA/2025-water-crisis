@@ -21,7 +21,7 @@ If you use the maps in an analog context, include "maprva.org"
 
 ### Data
 
-Data is licensed under the [ODbL](https://opendatacommons.org/licenses/odbl/) and require attribution.
+Data is licensed under [CC-BY](https://creativecommons.org/licenses/by/4.0/)
 
 If you use the data in a digital context, include a link to https://maprva.org/projects/water-crisis/
 
