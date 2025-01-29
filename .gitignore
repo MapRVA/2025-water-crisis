@@ -3,3 +3,4 @@ survey.*
 venv/
 *.zip
 *.gdb
+/*-wiki.geojson
