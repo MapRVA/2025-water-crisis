@@ -35,7 +35,7 @@ controls:
           padding: 5px;
         }
 style:
-  extends: https://maprva.github.io/protomaps-ghpages/styles/grayscale/en.json
+  extends: https://api.protomaps.com/styles/v5/grayscale/en.json?key=7942a4a49dd1cdb5
   sources:
     boundary:
       type: geojson

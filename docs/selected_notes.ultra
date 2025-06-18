@@ -8,7 +8,7 @@ options:
     compact: false
     customAttribution: '<a target="_blank" href="https://maprva.org">MapRVA</a>'
 style:
-  extends: https://maprva.github.io/protomaps-ghpages/styles/light/en.json
+  extends: https://api.protomaps.com/styles/v5/light/en.json?key=7942a4a49dd1cdb5
   sources:
     boundary:
       type: geojson
